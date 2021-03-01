@@ -64,6 +64,7 @@ const StartGameScreen = () => {
     if (
       localStorage.difficultyLevel &&
       gameStarted === true
+      && gameWord === ""
     ) {
       setFormData({
         difficultyLevel: localStorage.difficultyLevel
@@ -91,7 +92,7 @@ const StartGameScreen = () => {
     }
 
    
-  }, [gameStarted]);
+  }, [difficultyFactor, gameStarted, gameWord]);
 
   const getScore = (currentTimerValue) => {
     setCurrentTimerValue(currentTimerValue);
