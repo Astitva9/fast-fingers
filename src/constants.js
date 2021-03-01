@@ -29,3 +29,5 @@ export const MINIMUM_TIME = 2;
 export const WORD_SUCCESS_CODE = "#069a0b";
 
 export const WORD_FAIL_CODE = "#680bcc";
+
+export const DIFFICULTY_DROPDOWN = ["Easy","Medium","Hard"];
