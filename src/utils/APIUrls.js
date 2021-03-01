@@ -7,3 +7,5 @@ export const APIGetNewWord = 'https://astitva-apps.herokuapp.com/api/v1/getNewWo
 export const APIStoreUserScore = 'https://astitva-apps.herokuapp.com/api/v1/storeScore/'
 
 export const APIGetUserScore = 'https://astitva-apps.herokuapp.com/api/v1/getScore/'
+
+export const APIVerifyUserToken = 'https://astitva-apps.herokuapp.com/api/v1/verifyUserToken/'

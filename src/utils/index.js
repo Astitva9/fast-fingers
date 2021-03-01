@@ -2,7 +2,8 @@ import { callApi } from "./utilityFunctions";
 import {
   APIGetNewWord,
   APIStoreUserScore,
-  APIGetUserScore
+  APIGetUserScore,
+  APIVerifyUserToken
 } from './APIUrls'
 
 export const getWordFromDictionary = async(minWordLength, maxWordLength) => {
@@ -69,6 +70,26 @@ export const getAllFinalScore = async(userId) => {
  
   }catch (err){
     console.error(`storeFinalUserScore Error: ${err}`)
+  }
+};
+
+export const verifyUserToken = async() => {
+  try{
+ 
+   var config = {
+     method: 'get',
+     url: `${APIVerifyUserToken}`,
+     headers: { 
+       'Authorization': `Bearer ${localStorage.token}`
+     }
+   };
+   
+   const result = await callApi(config);
+ 
+   return result.status === 200;
+ 
+  }catch (err){
+    console.error(`verifyUserToken Error: ${err}`)
   }
 };
 

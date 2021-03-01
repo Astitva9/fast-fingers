@@ -1,5 +1,6 @@
 import React, {Fragment,Suspense, lazy, useEffect,useState} from "react";
 import {Route, Switch} from "react-router-dom";
+import {verifyUserToken} from '../utils'
 
 const WelcomeScreen = lazy(() => import("../Components/WelcomeScreen"));
 
@@ -12,11 +13,16 @@ const Routes = () => {
 	const [isLoggedIn,setIsLoggedIn] = useState(false);
 
 	useEffect(() => {
-		const loggedInUser = localStorage.getItem("token");
-		console.log("app js run")
-		if (loggedInUser) {
-			setIsLoggedIn(true);
+		const verifyUser = async () =>{
+			const loggedInUser = await verifyUserToken();
+			
+			if (loggedInUser) {
+				setIsLoggedIn(true);
+			}
 		}
+
+		verifyUser();
+		
 	}, [isLoggedIn, setIsLoggedIn]);
 
 
