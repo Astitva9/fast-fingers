@@ -1,23 +1,18 @@
-import React,{useEffect,useState} from "react";
+import React from "react";
 import {
   BrowserRouter as Router
 } from "react-router-dom";
 import Routes from './Routes'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+
 function App() {
 
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-      const loggedInUser = localStorage.getItem("token");
-      if (loggedInUser) {
-          setIsLoggedIn(true);
-      }
-  }, []);
   return (
     <Router>
-      <Routes isLoggedIn={isLoggedIn}/>
+      <Routes/>
       <ToastContainer />
     </Router>
   );

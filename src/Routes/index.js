@@ -1,13 +1,24 @@
-import React, {Fragment,Suspense, lazy} from "react";
+import React, {Fragment,Suspense, lazy, useEffect,useState} from "react";
 import {Route, Switch} from "react-router-dom";
 
-const Welcome = lazy(() => import("../Components/WelcomeScreen"));
+const WelcomeScreen = lazy(() => import("../Components/WelcomeScreen"));
 
 const SignUp = lazy(() => import("../Components/SignUp"));
 
 const StartGameScreen = lazy(() => import("../Components/GameStartScreen"));
 
-const Routes = ({isLoggedIn}) => {
+const Routes = () => {
+
+	const [isLoggedIn,setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const loggedInUser = localStorage.getItem("token");
+		console.log("app js run")
+		if (loggedInUser) {
+			setIsLoggedIn(true);
+		}
+	}, [isLoggedIn, setIsLoggedIn]);
+
 
 	return (
 		<Fragment>
@@ -23,20 +34,16 @@ const Routes = ({isLoggedIn}) => {
 					<Route
 						exact
 						path="/"
-						component={(isLoggedIn)?StartGameScreen:Welcome}
-					/>
+					>
+						{(isLoggedIn)?<StartGameScreen/>:<WelcomeScreen setIsLoggedIn={setIsLoggedIn}/>}
+					</Route>
 
-                    <Route
+					<Route
 						exact
-						path="/signup"
-						component={(isLoggedIn)?StartGameScreen:SignUp}
-					/>
-
-                    <Route
-                        exact
-                        path="/start-game"
-                        component={(isLoggedIn)?StartGameScreen:Welcome}
-                    />
+						path="/"
+					>
+						{(isLoggedIn)?<StartGameScreen/>:<SignUp setIsLoggedIn={setIsLoggedIn}/>}
+					</Route>
 					
 				</Switch>
                 </Suspense>

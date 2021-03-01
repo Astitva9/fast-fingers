@@ -5,7 +5,6 @@ import keyBoardImage from "../../assets/images/keyboard-FF.png";
 import { callApi } from "../../utils/utilityFunctions";
 import { APISignup } from "../../utils/APIUrls";
 import { toast } from 'react-toastify';
-import {Redirect} from 'react-router-dom';
 
 const INITIAL_STATE = {
   userName: "",
@@ -13,10 +12,8 @@ const INITIAL_STATE = {
   userPassword: "",
 };
 
-const SignUp = () => {
+const SignUp = ({setIsLoggedIn}) => {
   
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
-
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   const { userName, userEmail, userPassword } = formData;
@@ -48,8 +45,6 @@ const SignUp = () => {
         
         toast('Successfully Signed Up');
 
-        console.log(result);
-
         localStorage.setItem("token", result.data.token);
 
         localStorage.setItem("userId", result.data.userID);
@@ -62,13 +57,7 @@ const SignUp = () => {
     }
   };
 
-  if(isLoggedIn){
-
-    return (<Redirect to="/start-game" />);
-
-  }else{
-
-
+ 
     return (
       <Container fluid>
         <div>
@@ -131,7 +120,7 @@ const SignUp = () => {
         </div>
       </Container>
     );
-  }
+  
 };
 
 export default SignUp;

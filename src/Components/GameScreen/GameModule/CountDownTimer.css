@@ -1,0 +1,42 @@
+.base-timer {
+    position: relative;
+}
+  
+  
+  .base-timer__circle {
+    fill: none;
+    stroke: none;
+  }
+  
+  
+  .base-timer__path-elapsed {
+    stroke-width: 7px;
+    stroke: grey;
+  }
+  
+  .base-timer__label {
+    font-size: 35px;
+    position: absolute;
+    width: 95%;
+    height: 100%;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .base-timer__path-remaining {
+   
+    stroke-width: 7px;
+    stroke-linecap: round;
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    stroke: #ff5155;
+  }
+  
+  .base-timer__svg {
+    transform: scaleX(-1);
+    width: 250px;
+  }
+  

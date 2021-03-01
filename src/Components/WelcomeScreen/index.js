@@ -6,16 +6,14 @@ import playIcon from '../../assets/images/play-btn-FF.png';
 import { toast } from 'react-toastify';
 import { callApi } from "../../utils/utilityFunctions";
 import { APISignIn } from "../../utils/APIUrls";
-import {Redirect} from 'react-router-dom';
 
 const INITIAL_STATE ={
     userEmail:'',
     userPassword:''
 }
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({setIsLoggedIn}) => {
 
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
 
   const [formData, setFormData] = useState(INITIAL_STATE);
 
@@ -61,11 +59,6 @@ const WelcomeScreen = () => {
     }
   };
   
-  if(isLoggedIn){
-
-    return (<Redirect to="/start-game" />);
-
-  }else{
 
     return (
       <Container fluid>
@@ -121,7 +114,7 @@ const WelcomeScreen = () => {
       </div>
       </Container>
     );
-  }
+  
 };
 
 export default WelcomeScreen;
