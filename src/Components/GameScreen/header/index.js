@@ -2,17 +2,8 @@ import React,{useState,useEffect} from 'react';
 import { Row, Col} from 'react-bootstrap';
 import userIcon from '../../../assets/images/user-icon.png';
 import platAgainIcon from '../../../assets/images/try-again-btn.png'
+import {formatTimeLeft} from '../../../utils'
 
-function formatTimeLeft(time) {
-    const minutes = Math.floor(time / 60);
-    let seconds = time % 60;
-  
-    if (seconds < 10) {
-      seconds = `0${seconds}`;
-    }
-  
-    return `${minutes}:${seconds}`;
-}
 const Header = ({currentTotalScore}) => {
 
     const [currentScore, setCurrentScore] = useState(0);
@@ -30,7 +21,7 @@ const Header = ({currentTotalScore}) => {
             
                 <h3 className="top-heading-1">
                     <img src={userIcon} alt="User Icon" className="user-icon" />
-                    {/*localStorage.userName.toUpperCase()*/}
+                    Welcome To Fast Fingers
                 </h3>
 
                 <h4 className="top-heading-2">

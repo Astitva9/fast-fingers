@@ -1,20 +1,19 @@
-import React,{useState} from "react";
-import { Row, Col, Form, Container } from "react-bootstrap";
+import React, { useState } from "react";
+import { Form } from "react-bootstrap";
 import "./index.css";
-import keyBoardImage from '../../assets/images/keyboard-FF.png';
-import playIcon from '../../assets/images/play-btn-FF.png';
-import { toast } from 'react-toastify';
+import playIcon from "../../assets/images/play-btn-FF.png";
+import { toast } from "react-toastify";
 import { callApi } from "../../utils/utilityFunctions";
 import { APISignIn } from "../../utils/APIUrls";
+import LoginLayout from "../layout/LoginLayout";
+import { Link } from "react-router-dom";
 
-const INITIAL_STATE ={
-    userEmail:'',
-    userPassword:''
-}
+const INITIAL_STATE = {
+  userEmail: "",
+  userPassword: "",
+};
 
-const WelcomeScreen = ({setIsLoggedIn}) => {
-
-
+const WelcomeScreen = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   const { userEmail, userPassword } = formData;
@@ -22,13 +21,12 @@ const WelcomeScreen = ({setIsLoggedIn}) => {
   const onchange = async (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-
   const onsubmit = async (e) => {
     e.preventDefault();
 
     let body = {
       EMAIL: userEmail,
-      PASSWORD: userPassword
+      PASSWORD: userPassword,
     };
 
     var config = {
@@ -41,80 +39,55 @@ const WelcomeScreen = ({setIsLoggedIn}) => {
     };
 
     const result = await callApi(config);
-   
-    if(result.status === 200) {
-        
-        toast('Successfully Logged Up');
 
-        console.log(result);
+    if (result.status === 200) {
+      toast("Successfully Logged Up");
 
-        localStorage.setItem("token", result.data.token);
+      console.log(result);
 
-        localStorage.setItem("userId", result.data.userID);
+      localStorage.setItem("token", result.data.token);
 
-        setIsLoggedIn(true);
+      localStorage.setItem("userId", result.data.userID);
 
-    }else{
-        toast(result.response.data.message);
+      setIsLoggedIn(true);
+    } else {
+      toast(result.response.data.message);
     }
   };
-  
 
-    return (
-      <Container fluid>
-      <div>
-        <Row className="welcome-row">
-          <Col className="welcome-col">
-            <img
-              src={keyBoardImage}
-              alt="Fast Finger"
-              className="welcome-banner"
-            />
-            <h2>Fast Fingers</h2>
-            <div className="separator">The Ultimate Typing Game </div>
-          </Col>
-        </Row>
-
-        <Row className="welcome-form-row">
-          <Col className="welcome-form-col">
-            <Form onSubmit={onsubmit}>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Control
-                  type="text"
-                  placeholder="Type Your Email"
-                  className="name-field"
-                  name="userEmail"
-                  value={userEmail}
-                  onChange={onchange}
-                  required={true}
-                />              
-              </Form.Group>
-              <Form.Group controlId="formBasicPassword">
-                <Form.Control
-                  type="password"
-                  placeholder="Type Your Password"
-                  className="name-field"
-                  name="userPassword"
-                  value={userPassword}
-                  onChange={onchange}
-                  required={true}
-                />
-              </Form.Group>      
-              <button className="start-game-btn" type="submit">
-                <img
-                  src={playIcon}
-                  alt="Start Icon"
-                  className="play-icon"
-                />
-                START GAME
-              </button>
-            </Form>
-          </Col>
-        </Row>
-      </div>
-      </Container>
-    );
-  
+  return (
+    <LoginLayout>
+      <Form onSubmit={onsubmit}>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Control
+            type="text"
+            placeholder="Type Your Email"
+            className="name-field"
+            name="userEmail"
+            value={userEmail}
+            onChange={onchange}
+            required={true}
+          />
+        </Form.Group>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Control
+            type="password"
+            placeholder="Type Your Password"
+            className="name-field"
+            name="userPassword"
+            value={userPassword}
+            onChange={onchange}
+            required={true}
+          />
+        </Form.Group>
+        <button className="start-game-btn" type="submit">
+          <img src={playIcon} alt="Start Icon" className="play-icon" />
+          Sign In
+        </button>
+      </Form>
+      <Link className="start-game-btn" to="/signup">Sign Up</Link>
+    </LoginLayout>
+  );
 };
 
 export default WelcomeScreen;

@@ -5,6 +5,8 @@ import {
   APIGetUserScore,
   APIVerifyUserToken
 } from './APIUrls'
+import { MEDIUM, HARD,EASY } from "../constants";
+
 
 export const getWordFromDictionary = async(minWordLength, maxWordLength) => {
  try{
@@ -102,4 +104,43 @@ export const formatTimeLeft = (time) =>{
   }
 
   return `${minutes}:${seconds}`;
+}
+export const getNewWordAndTime = async(difficultyFactor) =>{
+  let newWord = null;
+  let timeForWord = 0;
+  if (localStorage.difficultyLevel === MEDIUM.VALUE) {
+    newWord = await getWordFromDictionary(5,8);
+    timeForWord = Math.round(newWord.length / difficultyFactor);
+  } else if (localStorage.difficultyLevel === HARD.VALUE) {
+    newWord = await getWordFromDictionary(8,25);
+    timeForWord = Math.round(newWord.length / difficultyFactor);
+  } else {
+    newWord = await getWordFromDictionary(2,5);
+    timeForWord = Math.round(newWord.length / difficultyFactor);
+  }
+
+  return {
+    newWord,
+    timeForWord
+  }
+}
+
+export const getLevel = async(_difficultyFactor)=>{
+  let level;
+  if (_difficultyFactor >= EASY.DIFFICULTY_FACTOR && _difficultyFactor < MEDIUM.DIFFICULTY_FACTOR) level = EASY.VALUE;
+  else if (_difficultyFactor >= MEDIUM.DIFFICULTY_FACTOR && _difficultyFactor < HARD.DIFFICULTY_FACTOR)
+    level = MEDIUM.VALUE;
+  else level = HARD.DIFFICULTY_FACTOR;
+
+  return level;
+}
+
+export const setGameDifficultyFactor = async(setDifficultyFactor) => {
+  if (localStorage.difficultyLevel === MEDIUM.VALUE) {
+    setDifficultyFactor(MEDIUM.DIFFICULTY_FACTOR);
+  } else if (localStorage.difficultyLevel === HARD.VALUE) {
+    setDifficultyFactor(HARD.DIFFICULTY_FACTOR);
+  } else {
+    setDifficultyFactor(EASY.DIFFICULTY_FACTOR);
+  }
 }

@@ -1,13 +1,10 @@
 import React,{useState,useEffect} from "react";
-import { Row, Col, Form, Container } from "react-bootstrap";
 import "./index.css";
-import keyBoardImage from '../../assets/images/keyboard-FF.png';
-import playIcon from '../../assets/images/play-btn-FF.png';
-import { EASY, MEDIUM, HARD, MINIMUM_TIME, DIFFICULTY_FACTOR_INC } from "../../constants";
-import { getWordFromDictionary } from "../../utils";
+import { EASY, MINIMUM_TIME, DIFFICULTY_FACTOR_INC } from "../../constants";
+import { getNewWordAndTime,getLevel } from "../../utils";
 import GameScreen from "../GameScreen";
-import {storeFinalUserScore, getAllFinalScore} from '../../utils/index'
-
+import {storeFinalUserScore, getAllFinalScore, setGameDifficultyFactor} from '../../utils/index'
+import GameStartForm from './GameStartForm'
 const StartGameScreen = () => {
 
   const [formData, setFormData] = useState({
@@ -46,19 +43,10 @@ const StartGameScreen = () => {
   };
 
   const resetGameWord = async () => {
-    let newWord = null;
-    let timeForWord = 0;
-    if (localStorage.difficultyLevel === MEDIUM.VALUE) {
-      newWord = await getWordFromDictionary(5,8);
-      timeForWord = Math.round(newWord.length / difficultyFactor);
-    } else if (localStorage.difficultyLevel === HARD.VALUE) {
-      newWord = await getWordFromDictionary(8,25);
-      timeForWord = Math.round(newWord.length / difficultyFactor);
-    } else {
-      newWord = await getWordFromDictionary(2,5);
-      timeForWord = Math.round(newWord.length / difficultyFactor);
-    }
-    let maxTimeForWord = Math.max(timeForWord, 2);
+  
+    let {newWord,timeForWord}= await getNewWordAndTime(difficultyFactor);
+
+    let maxTimeForWord = Math.max(timeForWord, MINIMUM_TIME);
 
     setInputValue("");
 
@@ -67,7 +55,10 @@ const StartGameScreen = () => {
     setGameWord(newWord);
   };
 
-  
+  const getAllScore = async() =>{
+    const scores = await getAllFinalScore(localStorage.getItem("userId"))
+    setTotalScoreArray(scores)
+  }
 
   useEffect(() => {
     if (
@@ -81,21 +72,10 @@ const StartGameScreen = () => {
       });
 
       const generateWordDifficultyWise = async () => {
-        let newWord = null;
-        let timeForWord = 0;
-        if (localStorage.difficultyLevel === MEDIUM.VALUE) {
-          setDifficultyFactor(MEDIUM.DIFFICULTY_FACTOR);
-          newWord = await getWordFromDictionary(5,8);
-          timeForWord = Math.round(newWord.length / MEDIUM.DIFFICULTY_FACTOR);
-        } else if (localStorage.difficultyLevel === HARD.VALUE) {
-          setDifficultyFactor(HARD.DIFFICULTY_FACTOR);
-          newWord = await getWordFromDictionary(8,25);
-          timeForWord = Math.round(newWord.length / HARD.DIFFICULTY_FACTOR);
-        } else {
-          setDifficultyFactor(EASY.DIFFICULTY_FACTOR);
-          newWord = await getWordFromDictionary(2,5);
-          timeForWord = Math.round(newWord.length / EASY.DIFFICULTY_FACTOR);
-        }
+       
+        setGameDifficultyFactor(setDifficultyFactor);
+
+        let {newWord,timeForWord} = await getNewWordAndTime(difficultyFactor);
 
         let maxTimeForWord = Math.max(timeForWord, 2);
 
@@ -105,24 +85,19 @@ const StartGameScreen = () => {
         setGameWord(newWord);
       };
 
-      const getAllScore = async() =>{
-        const scores = await getAllFinalScore(localStorage.getItem("userId"))
-        setTotalScoreArray(scores)
-      }
-
       getAllScore();
 
       generateWordDifficultyWise();
     }
 
-    return () => {};
+   
   }, [gameStarted]);
 
   const getScore = (currentTimerValue) => {
     setCurrentTimerValue(currentTimerValue);
   };
 
-  const onWordChange = (e) => {
+  const onWordChange = async (e) => {
     e.persist();
     if (e.target.value.toUpperCase() === gameWord) {
       //Increase the difficulty factor by  0.01 on success
@@ -130,12 +105,8 @@ const StartGameScreen = () => {
 
       setDifficultyFactor(_difficultyFactor);
 
-      let level;
-      if (_difficultyFactor >= EASY.DIFFICULTY_FACTOR && _difficultyFactor < MEDIUM.DIFFICULTY_FACTOR) level = EASY.VALUE;
-      else if (_difficultyFactor >= MEDIUM.DIFFICULTY_FACTOR && _difficultyFactor < HARD.DIFFICULTY_FACTOR)
-        level = MEDIUM.VALUE;
-      else level = HARD.DIFFICULTY_FACTOR;
-
+      let level = getLevel(_difficultyFactor);
+     
       localStorage.setItem("difficultyLevel", level);
 
       resetGameWord();
@@ -158,7 +129,11 @@ const StartGameScreen = () => {
   const playAgainOnclick = (currentScore) => {
     setCurrentTotalScore(0);
 
+    setInputValue("");
+
     setTheScoreArray([]);
+
+    getAllScore();
 
     storeFinalUserScore(localStorage.getItem("userId"),currentScore);
   };
@@ -168,51 +143,11 @@ const StartGameScreen = () => {
   if (!gameStarted)
     ScreenComponent = (
     
-    <div>
-      <Row className="welcome-row">
-        <Col className="welcome-col">
-          <img
-            src={keyBoardImage}
-            alt="Fast Finger"
-            className="welcome-banner"
-          />
-          <h2>Fast Fingers</h2>
-          <div className="separator">The Ultimate Typing Game </div>
-        </Col>
-      </Row>
-
-      <Row className="welcome-form-row">
-        <Col className="welcome-form-col">
-        <h2>Welcome!!</h2>
-          <Form onSubmit={submitUserData}>
-            <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Control
-                    as="select"
-                    className="select-field"
-                    name="difficultyLevel"
-                    value={formData.difficultyLevel}
-                    onChange={onchange}
-                    required={true}
-                >
-                    <option value="">Select Difficulty Level</option>
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                </Form.Control>
-                            
-            </Form.Group>
-            <button className="start-game-btn" type="submit">
-              <img
-                src={playIcon}
-                alt="Start Icon"
-                className="play-icon"
-              />
-              START GAME
-            </button>
-          </Form>
-        </Col>
-      </Row>
-    </div>
+      <GameStartForm
+        submitUserData={submitUserData}
+        formData={formData}
+        onchange={onchange}
+      />
    
     );
   else if(gameWord !== "")
@@ -233,7 +168,7 @@ const StartGameScreen = () => {
       />
     );
 
-  return <Container fluid>{ScreenComponent}</Container>;
+  return ScreenComponent;
 
 };
 

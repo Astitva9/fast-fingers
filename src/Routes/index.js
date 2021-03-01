@@ -46,7 +46,7 @@ const Routes = () => {
 
 					<Route
 						exact
-						path="/"
+						path="/signup"
 					>
 						{(isLoggedIn)?<StartGameScreen/>:<SignUp setIsLoggedIn={setIsLoggedIn}/>}
 					</Route>

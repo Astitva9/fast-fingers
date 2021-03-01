@@ -3,6 +3,7 @@ import Header from "./header";
 import Footer from "./footer";
 import GameModule from "./GameModule";
 import ExitModule from "./ExitModule";
+import { Container } from "react-bootstrap";
 import "./index.css";
 
 const GameScreen = ({
@@ -55,11 +56,12 @@ const GameScreen = ({
     );
 
   return (
-    <div className="">
+    <Container fluid>
+
       <Header currentTotalScore={currentTotalScore} />
       {mainModule}
       <Footer stopMainGame={stopMainGame} />
-    </div>
+    </Container>
   );
 };
 

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Row, Col, Form, Container } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import "./index.css";
-import keyBoardImage from "../../assets/images/keyboard-FF.png";
 import { callApi } from "../../utils/utilityFunctions";
 import { APISignup } from "../../utils/APIUrls";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
+import LoginLayout from "../layout/LoginLayout";
 
 const INITIAL_STATE = {
   userName: "",
@@ -12,8 +12,7 @@ const INITIAL_STATE = {
   userPassword: "",
 };
 
-const SignUp = ({setIsLoggedIn}) => {
-  
+const SignUp = ({ setIsLoggedIn }) => {
   const [formData, setFormData] = useState(INITIAL_STATE);
 
   const { userName, userEmail, userPassword } = formData;
@@ -40,87 +39,64 @@ const SignUp = ({setIsLoggedIn}) => {
     };
 
     const result = await callApi(config);
-   
-    if(result.status === 200) {
-        
-        toast('Successfully Signed Up');
 
-        localStorage.setItem("token", result.data.token);
+    if (result.status === 200) {
+      toast("Successfully Signed Up");
 
-        localStorage.setItem("userId", result.data.userID);
+      localStorage.setItem("token", result.data.token);
 
-        setIsLoggedIn(true);
+      localStorage.setItem("userId", result.data.userID);
 
-
-    }else{
-        toast(result.response.data.message);
+      setIsLoggedIn(true);
+    } else {
+      toast(result.response.data.message);
     }
   };
 
- 
-    return (
-      <Container fluid>
-        <div>
-          <Row className="welcome-row">
-            <Col className="welcome-col">
-              <img
-                src={keyBoardImage}
-                alt="Fast Finger"
-                className="welcome-banner"
-              />
-              <h2>Fast Fingers</h2>
-              <div className="separator">The Ultimate Typing Game </div>
-            </Col>
-          </Row>
+  return (
+    <LoginLayout>
+      <Form onSubmit={onsubmit}>
+        <Form.Group controlId="formBasicName">
+          <Form.Control
+            type="text"
+            placeholder="Type Your Name"
+            className="name-field"
+            name="userName"
+            value={userName}
+            onChange={onchange}
+            required={true}
+          />
+        </Form.Group>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Control
+            type="email"
+            placeholder="Type Your Email"
+            className="name-field"
+            name="userEmail"
+            value={userEmail}
+            onChange={onchange}
+            required={true}
+          />
+        </Form.Group>
 
-          <Row className="welcome-form-row">
-            <Col className="welcome-form-col">
-              <Form onSubmit={onsubmit}>
-                <Form.Group controlId="formBasicName">
-                  <Form.Control
-                    type="text"
-                    placeholder="Type Your Name"
-                    className="name-field"
-                    name="userName"
-                    value={userName}
-                    onChange={onchange}
-                    required={true}
-                  />
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Control
-                    type="email"
-                    placeholder="Type Your Email"
-                    className="name-field"
-                    name="userEmail"
-                    value={userEmail}
-                    onChange={onchange}
-                    required={true}
-                  />
-                </Form.Group>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Control
+            type="password"
+            placeholder="Type Your Password"
+            className="name-field"
+            name="userPassword"
+            value={userPassword}
+            onChange={onchange}
+            required={true}
+          />
+        </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
-                  <Form.Control
-                    type="password"
-                    placeholder="Type Your Password"
-                    className="name-field"
-                    name="userPassword"
-                    value={userPassword}
-                    onChange={onchange}
-                    required={true}
-                  />
-                </Form.Group>
-
-                <button className="start-game-btn" type="submit">
-                  Sign Up
-                </button>
-              </Form>
-            </Col>
-          </Row>
-        </div>
-      </Container>
-    );
-  
+        <button className="start-game-btn" type="submit">
+          Sign Up
+        </button>
+      </Form>
+    </LoginLayout>
+  );
 };
 
 export default SignUp;
