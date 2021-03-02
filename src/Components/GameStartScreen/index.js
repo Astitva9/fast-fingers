@@ -106,7 +106,7 @@ const StartGameScreen = () => {
 
       setDifficultyFactor(_difficultyFactor);
 
-      let level = getLevel(_difficultyFactor);
+      let level = await getLevel(_difficultyFactor);
      
       localStorage.setItem("difficultyLevel", level);
 

@@ -14,8 +14,8 @@ const LoginLayout = ({children}) => {
               alt="Fast Finger"
               className="welcome-banner"
             />
-            <h2>Fast Fingers</h2>
-            <div className="separator">The Ultimate Typing Game </div>
+            <h2>FAST FINGERS</h2>
+            <div className="separator">THE ULTIMATE TYPING GAME</div>
           </Col>
         </Row>
 

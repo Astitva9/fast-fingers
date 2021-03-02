@@ -8,6 +8,8 @@ const SignUp = lazy(() => import("../Components/SignUp"));
 
 const StartGameScreen = lazy(() => import("../Components/GameStartScreen"));
 
+const NotFoundPage = lazy(() => import("../Components/NotFoundPage"));
+
 const Routes = () => {
 
 	const [isLoggedIn,setIsLoggedIn] = useState(false);
@@ -49,6 +51,13 @@ const Routes = () => {
 						path="/signup"
 					>
 						{(isLoggedIn)?<StartGameScreen/>:<SignUp setIsLoggedIn={setIsLoggedIn}/>}
+					</Route>
+
+					<Route
+						exact
+						path='*'
+					>
+						<NotFoundPage/>
 					</Route>
 					
 				</Switch>
